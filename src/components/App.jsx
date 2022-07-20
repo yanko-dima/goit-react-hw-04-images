@@ -1,17 +1,41 @@
-export const App = () => {
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101',
-      }}
-    >
-      <h1>Hello World</h1>
-      React homework template
-    </div>
-  );
-};
+import { Component } from 'react';
+import './styles.css';
+import Searchbar from 'components/Searchbar';
+import ImageGallery from 'components/ImageGallery';
+import Loader from 'components/Loader';
+import Button from 'components/Button';
+import Modal from 'components/Modal';
+
+export class App extends Component {
+  state = {
+    img: null,
+    error: null,
+    status: 'idle',
+  };
+
+  // componentDidMount() {
+
+  // }
+
+  componentDidUpdate(prevProps, prevState) {
+    const prevImg = prevState.img;
+    const nextImg = this.state.img;
+
+    if (nextImg !== prevImg) {
+      this.setState({ status: 'pending' });
+    }
+  }
+
+  render() {
+    // const { img } = this.state;
+    return (
+      <>
+        <Searchbar />
+        <ImageGallery />
+        <Loader />
+        <Button />
+        <Modal />
+      </>
+    );
+  }
+}
