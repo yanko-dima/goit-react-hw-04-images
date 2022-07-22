@@ -1,4 +1,5 @@
 import { Component } from 'react';
+// import { ToastContainer } from 'react-toastify';
 import './styles.css';
 import Searchbar from 'components/Searchbar';
 import ImageGallery from 'components/ImageGallery';
@@ -9,14 +10,15 @@ import ImageGallery from 'components/ImageGallery';
 export class App extends Component {
   state = {
     images: null,
-    imgName: null,
+    searchKey: '',
+    loading: false,
     error: null,
     status: 'idle',
   };
 
-  // componentDidMount() {
-
-  // }
+  componentDidMount() {
+    this.setState({ loading: true });
+  }
 
   componentDidUpdate(prevProps, prevState) {
     const prevImg = prevState.img;
@@ -29,20 +31,21 @@ export class App extends Component {
   }
 
   formSubmitHandler = ({ search }) => {
-    // const { imgName } = this.state;
+    // const { loading } = this.state;
 
-    this.setState({ imgName: search });
+    this.setState({ searchKey: search });
   };
 
   render() {
-    const { imgName } = this.state;
+    const { searchKey } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.formSubmitHandler} />
-        <ImageGallery imgName={imgName} />
-        {/* <Loader /> */}
+        <ImageGallery searchKey={searchKey} />
+        {/* {loading && <div></div>} */}
         {/* <Button /> */}
         {/* <Modal /> */}
+        {/* <ToastContainer /> */}
       </>
     );
   }
