@@ -2,13 +2,14 @@ import { Component } from 'react';
 import './styles.css';
 import Searchbar from 'components/Searchbar';
 import ImageGallery from 'components/ImageGallery';
-import Loader from 'components/Loader';
-import Button from 'components/Button';
-import Modal from 'components/Modal';
+// import Loader from 'components/Loader';
+// import Button from 'components/Button';
+// import Modal from 'components/Modal';
 
 export class App extends Component {
   state = {
-    img: null,
+    images: null,
+    imgName: null,
     error: null,
     status: 'idle',
   };
@@ -23,18 +24,25 @@ export class App extends Component {
 
     if (nextImg !== prevImg) {
       this.setState({ status: 'pending' });
+      console.log('status: pending');
     }
   }
 
+  formSubmitHandler = ({ search }) => {
+    // const { imgName } = this.state;
+
+    this.setState({ imgName: search });
+  };
+
   render() {
-    // const { img } = this.state;
+    const { imgName } = this.state;
     return (
       <>
-        <Searchbar />
-        <ImageGallery />
-        <Loader />
-        <Button />
-        <Modal />
+        <Searchbar onSubmit={this.formSubmitHandler} />
+        <ImageGallery imgName={imgName} />
+        {/* <Loader /> */}
+        {/* <Button /> */}
+        {/* <Modal /> */}
       </>
     );
   }
