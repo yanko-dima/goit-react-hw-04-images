@@ -1,5 +1,5 @@
-const ImageGalleryItem = ({ webformatURL, largeImageURL, imgName }) => (
-  <img src={webformatURL} alt={imgName} />
+const ImageGalleryItem = ({ webformatURL, largeImageURL, searchKey }) => (
+  <img src={webformatURL} alt={searchKey} />
 );
 
 export default ImageGalleryItem;

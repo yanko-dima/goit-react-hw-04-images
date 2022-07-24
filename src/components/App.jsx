@@ -3,17 +3,12 @@ import { Component } from 'react';
 import './styles.css';
 import Searchbar from 'components/Searchbar';
 import ImageGallery from 'components/ImageGallery';
-// import Loader from 'components/Loader';
 // import Button from 'components/Button';
 // import Modal from 'components/Modal';
 
 export class App extends Component {
   state = {
-    images: null,
     searchKey: '',
-    loading: false,
-    error: null,
-    status: 'idle',
   };
 
   componentDidMount() {
@@ -21,12 +16,11 @@ export class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const prevImg = prevState.img;
-    const nextImg = this.state.img;
+    const prevSearchKey = prevState.searchKey;
+    const nextSearchKey = this.state.searchKey;
 
-    if (nextImg !== prevImg) {
-      this.setState({ status: 'pending' });
-      console.log('status: pending');
+    if (nextSearchKey !== prevSearchKey) {
+      console.log('Пришел запрос');
     }
   }
 
@@ -38,11 +32,11 @@ export class App extends Component {
 
   render() {
     const { searchKey } = this.state;
+
     return (
       <>
         <Searchbar onSubmit={this.formSubmitHandler} />
         <ImageGallery searchKey={searchKey} />
-        {/* {loading && <div></div>} */}
         {/* <Button /> */}
         {/* <Modal /> */}
         {/* <ToastContainer /> */}
