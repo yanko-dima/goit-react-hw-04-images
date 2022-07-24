@@ -1,5 +1,4 @@
 import { Component } from 'react';
-
 import css from './ImageGalleryItem.module.css';
 import Modal from 'components/Modal';
 
@@ -7,6 +6,7 @@ class ImageGalleryItem extends Component {
   state = {
     showModal: false,
   };
+
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
