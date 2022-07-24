@@ -2,6 +2,8 @@ import { Component } from 'react';
 import css from 'components/ImageGallery/ImageGallery.module.css';
 import ImageGalleryItem from 'components/ImageGalleryItem';
 import Loader from 'components/Loader';
+import { fetchImages } from 'servises/pixabay-api';
+import Button from 'components/Button';
 
 class ImageGallery extends Component {
   state = {
@@ -19,24 +21,11 @@ class ImageGallery extends Component {
     const { page, per_page } = this.state;
     const prevSearchKey = prevProps.searchKey;
     const nextSearchKey = this.props.searchKey;
-    // console.log('prevSearchKey: ', prevSearchKey);
-    // console.log('nextSearchKey: ', nextSearchKey);
 
     if (prevSearchKey !== nextSearchKey) {
-      this.setState({ status: 'pending' });
+      this.setState({ status: 'pending', page: 1 });
 
-      fetch(
-        `https://pixabay.com/api/?q=${nextSearchKey}&page=${page}&key=27888292-ee7badc36537d4c81fc58ae14&image_type=photo&orientation=horizontal&per_page=${per_page}`
-      )
-        .then(res => {
-          if (res.ok) {
-            return res.json();
-          }
-
-          return Promise.reject(
-            new Error(`No images with ${nextSearchKey} name`)
-          );
-        })
+      fetchImages(nextSearchKey, page, per_page)
         .then(images => {
           this.setState({ images, status: 'resolved' });
         })
@@ -53,19 +42,20 @@ class ImageGallery extends Component {
     }
     if (status === 'resolved') {
       return (
-        <ul className={css.imageGallery}>
-          {images &&
-            images.hits.map(({ id, webformatURL, largeImageURL }) => (
+        <>
+          <ul className={css.imageGallery}>
+            {images.hits.map(({ id, webformatURL, largeImageURL }) => (
               <li className={css.imageGalleryItem} key={id}>
                 <ImageGalleryItem
-                  id={id}
                   webformatURL={webformatURL}
                   largeImageURL={largeImageURL}
                   searchKey={searchKey}
                 />
               </li>
             ))}
-        </ul>
+          </ul>
+          {images.hits.length >= 12 && <Button />}
+        </>
       );
     }
   }

@@ -3,8 +3,6 @@ import { Component } from 'react';
 import './styles.css';
 import Searchbar from 'components/Searchbar';
 import ImageGallery from 'components/ImageGallery';
-// import Button from 'components/Button';
-// import Modal from 'components/Modal';
 
 export class App extends Component {
   state = {
@@ -37,8 +35,6 @@ export class App extends Component {
       <>
         <Searchbar onSubmit={this.formSubmitHandler} />
         <ImageGallery searchKey={searchKey} />
-        {/* <Button /> */}
-        {/* <Modal /> */}
         {/* <ToastContainer /> */}
       </>
     );
