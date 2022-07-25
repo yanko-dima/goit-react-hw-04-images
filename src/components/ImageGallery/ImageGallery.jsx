@@ -16,16 +16,16 @@ class ImageGallery extends Component {
   componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState) {
-    const { page, per_page } = this.props;
+    const { page } = this.props;
     const prevSearchKey = prevProps.searchKey;
     const nextSearchKey = this.props.searchKey;
-    const prevPage = prevProps.per_page;
-    const nextPage = this.props.per_page;
+    const prevPage = prevProps.page;
+    const nextPage = this.props.page;
 
     if (prevSearchKey !== nextSearchKey || prevPage !== nextPage) {
       this.setState({ status: 'pending' });
 
-      fetchImages(nextSearchKey, page, per_page)
+      fetchImages(nextSearchKey, page)
         .then(images => {
           this.setState({ images: images.hits, status: 'resolved' });
 

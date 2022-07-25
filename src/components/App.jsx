@@ -8,7 +8,6 @@ export class App extends Component {
   state = {
     searchKey: '',
     page: 1,
-    per_page: 12,
   };
 
   formSubmitHandler = ({ search }) => {
@@ -16,26 +15,26 @@ export class App extends Component {
   };
 
   resetPage = () => {
-    this.setState({ page: 1, per_page: 12 });
+    this.setState({ page: 1 });
   };
 
   onLoadMore = () => {
-    this.setState(({ per_page }) => ({ per_page: per_page + 12 }));
+    this.setState(({ page }) => ({ page: page + 1 }));
   };
 
   render() {
-    const { searchKey, page, per_page } = this.state;
+    const { searchKey, page } = this.state;
 
     return (
       <>
         <Searchbar
           onSubmit={this.formSubmitHandler}
           resetPage={this.resetPage}
+          page={page}
         />
         <ImageGallery
           onLoadMore={this.onLoadMore}
           searchKey={searchKey}
-          per_page={per_page}
           page={page}
         />
         <ToastContainer autoClose={3000} />
