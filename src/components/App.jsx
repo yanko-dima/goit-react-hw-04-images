@@ -1,5 +1,5 @@
 import { Component } from 'react';
-// import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import './styles.css';
 import Searchbar from 'components/Searchbar';
 import ImageGallery from 'components/ImageGallery';
@@ -7,35 +7,38 @@ import ImageGallery from 'components/ImageGallery';
 export class App extends Component {
   state = {
     searchKey: '',
+    page: 1,
+    per_page: 12,
   };
 
-  componentDidMount() {
-    this.setState({ loading: true });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const prevSearchKey = prevState.searchKey;
-    const nextSearchKey = this.state.searchKey;
-
-    if (nextSearchKey !== prevSearchKey) {
-      console.log('Пришел запрос');
-    }
-  }
-
   formSubmitHandler = ({ search }) => {
-    // const { loading } = this.state;
-
     this.setState({ searchKey: search });
   };
 
+  resetPage = () => {
+    this.setState({ page: 1, per_page: 12 });
+  };
+
+  onLoadMore = () => {
+    this.setState(({ per_page }) => ({ per_page: per_page + 12 }));
+  };
+
   render() {
-    const { searchKey } = this.state;
+    const { searchKey, page, per_page } = this.state;
 
     return (
       <>
-        <Searchbar onSubmit={this.formSubmitHandler} />
-        <ImageGallery searchKey={searchKey} />
-        {/* <ToastContainer /> */}
+        <Searchbar
+          onSubmit={this.formSubmitHandler}
+          resetPage={this.resetPage}
+        />
+        <ImageGallery
+          onLoadMore={this.onLoadMore}
+          searchKey={searchKey}
+          per_page={per_page}
+          page={page}
+        />
+        <ToastContainer autoClose={3000} />
       </>
     );
   }
