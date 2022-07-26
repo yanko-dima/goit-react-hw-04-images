@@ -4,18 +4,23 @@ import 'react-toastify/dist/ReactToastify.css';
 import Searchbar from 'components/Searchbar';
 import { fetchImages } from 'servises/pixabay-api';
 import ImageGallery from 'components/ImageGallery';
+import Loader from 'components/Loader';
+import Button from 'components/Button';
+import Modal from 'components/Modal';
+import Home from 'components/Home';
 
 export class App extends Component {
   state = {
     searchKey: '',
-    images: [],
+    gallery: [],
     page: 1,
     showModal: false,
     status: 'idle',
+    largeImage: null,
+    largeImageAlt: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { page } = this.state;
     const prevSearchKey = prevState.searchKey;
     const nextSearchKey = this.state.searchKey;
     const prevPage = prevState.page;
@@ -24,58 +29,95 @@ export class App extends Component {
     if (prevSearchKey !== nextSearchKey || prevPage !== nextPage) {
       this.setState({ status: 'pending' });
 
-      fetchImages(nextSearchKey, page)
-        .then(images => {
-          this.setState({ images: images.hits, status: 'resolved' });
-
-          if (images.hits.length === 0) {
-            toast.error('🦄 I`m dont found images');
-            this.onStatusIdle();
+      fetchImages(nextSearchKey, nextPage)
+        .then(result => {
+          if (nextPage === 1) {
+            if (result.hits.length === 0) {
+              toast.info('🦄 No images for your request');
+              this.onStatusIdle();
+            } else {
+              toast.success(`🦄 I'm found ${result.total} images`);
+              this.setState({ gallery: result.hits, status: 'resolved' });
+            }
           }
+        })
+        .catch(error => this.setState({ error }));
+    }
+
+    if (prevPage !== nextPage && nextPage !== 1) {
+      this.setState({ status: 'pending' });
+      fetchImages(nextSearchKey, nextPage)
+        .then(result => {
+          this.setState({
+            gallery: [...prevState.gallery, ...result.hits],
+            status: 'resolved',
+          });
         })
         .catch(error => this.setState({ error }));
     }
   }
 
   formSubmitHandler = ({ search }) => {
-    this.setState({ searchKey: search });
-  };
-
-  resetPage = () => {
-    this.setState({ page: 1 });
+    this.setState({ searchKey: search, page: 1 });
   };
 
   onLoadMore = () => {
+    this.setState({ status: 'pending' });
     this.setState(({ page }) => ({ page: page + 1 }));
   };
 
-  toggleModal = () => {
+  closeModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
+  };
+
+  openModal = image => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
+    this.setState({ largeImage: image.largeImageURL });
   };
 
   onStatusIdle = () => {
     this.setState({ status: 'idle' });
   };
 
+  hangleLargeImageAlt = image => {
+    this.setState({ largeImageAlt: image.tags });
+  };
+
   render() {
-    const { searchKey, images, page, showModal, status } = this.state;
+    const {
+      formSubmitHandler,
+      onLoadMore,
+      closeModal,
+      openModal,
+      hangleLargeImageAlt,
+    } = this;
+    const { gallery, showModal, status, largeImage, largeImageAlt } =
+      this.state;
 
     return (
       <>
-        <Searchbar
-          onSubmit={this.formSubmitHandler}
-          resetPage={this.resetPage}
-        />
-        <ImageGallery
-          onLoadMore={this.onLoadMore}
-          searchKey={searchKey}
-          images={images}
-          page={page}
-          toggleModal={this.toggleModal}
-          showModal={showModal}
-          status={status}
-        />
-        <ToastContainer autoClose={4000} />
+        <Searchbar onSubmit={formSubmitHandler} />
+        {status === 'idle' && <Home />}
+        {status === 'resolved' && (
+          <ImageGallery
+            gallery={gallery}
+            onOpenModal={openModal}
+            onLargeImageAlt={hangleLargeImageAlt}
+          />
+        )}
+        {status === 'pending' && <Loader />}
+        {status === 'resolved' && gallery.length >= 12 && (
+          <Button onLoadMore={onLoadMore} />
+        )}
+        {showModal && largeImage && (
+          <Modal
+            largeImage={largeImage}
+            alt={largeImageAlt}
+            onClose={closeModal}
+          />
+        )}
+        {console.log(this.state.largeImageAlt)}
+        <ToastContainer autoClose={3000} />
       </>
     );
   }

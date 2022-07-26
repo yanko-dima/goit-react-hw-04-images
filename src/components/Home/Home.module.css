@@ -1,0 +1,21 @@
+.idleWraper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.idleTitle {
+  color: #475a6a;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 5%;
+}
+
+.idleText {
+  color: #475a6a;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.4;
+}

@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { createPortal } from 'react-dom';
+import PropTypes from 'prop-types';
 import css from './Modal.module.css';
 
 const modalRoot = document.querySelector('#modal-root');
@@ -26,17 +27,19 @@ class Modal extends Component {
   };
 
   render() {
-    const { largeImageURL, searchKey } = this.props;
+    const { largeImage, alt } = this.props;
 
     return createPortal(
       <div className={css.Overlay} onClick={this.handleBeckdropClick}>
         <div className={css.Modal}>
-          <img src={largeImageURL} alt={searchKey} />
+          <img src={largeImage} alt={alt} />
         </div>
       </div>,
       modalRoot
     );
   }
 }
+
+Modal.propTypes = {};
 
 export default Modal;

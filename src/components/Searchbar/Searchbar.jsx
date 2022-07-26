@@ -16,7 +16,7 @@ class Searchbar extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { onSubmit, resetPage } = this.props;
+    const { onSubmit } = this.props;
 
     if (this.state.search.trim() === '') {
       toast.error('🦄 Enter image name!');
@@ -24,7 +24,6 @@ class Searchbar extends Component {
     }
 
     onSubmit(this.state);
-    resetPage();
     this.onFormReset();
   };
 

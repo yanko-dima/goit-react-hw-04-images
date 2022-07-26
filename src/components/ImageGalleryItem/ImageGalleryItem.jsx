@@ -1,30 +1,19 @@
 import css from './ImageGalleryItem.module.css';
-import Modal from 'components/Modal';
 
-const ImageGalleryItem = ({
-  webformatURL,
-  largeImageURL,
-  searchKey,
-  toggleModal,
-  showModal,
-}) => {
+const ImageGalleryItem = ({ item, onOpenModal, onLargeImageAlt }) => {
   return (
-    <>
+    <li className={css.imageGalleryItem}>
       <img
         className={css.imageGalleryItemImage}
-        src={webformatURL}
-        alt={searchKey}
-        onClick={toggleModal}
+        src={item.webformatURL}
+        alt={item.tags}
+        loading="lazy"
+        onClick={() => {
+          onOpenModal(item);
+          onLargeImageAlt(item);
+        }}
       />
-
-      {showModal && (
-        <Modal
-          onClose={toggleModal}
-          largeImageURL={largeImageURL}
-          searchKey={searchKey}
-        />
-      )}
-    </>
+    </li>
   );
 };
 

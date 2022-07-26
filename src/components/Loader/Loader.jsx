@@ -1,6 +1,5 @@
 import { Puff } from 'react-loader-spinner';
 import css from './Loader.module.css';
-// import css from './ImageGalleryItem.module.css';
 
 const Loader = () => {
   return (
