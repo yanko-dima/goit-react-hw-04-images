@@ -6,6 +6,15 @@ import css from './Modal.module.css';
 const modalRoot = document.querySelector('#modal-root');
 
 class Modal extends Component {
+  static propTypes = {
+    props: PropTypes.arrayOf(
+      PropTypes.exact({
+        largeImage: PropTypes.string.isRequired,
+        alt: PropTypes.string.isRequired,
+      })
+    ),
+  };
+
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
   }

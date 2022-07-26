@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Searchbar from 'components/Searchbar';
@@ -10,13 +11,27 @@ import Modal from 'components/Modal';
 import Home from 'components/Home';
 
 export class App extends Component {
+  static propTypes = {
+    state: PropTypes.arrayOf(
+      PropTypes.exact({
+        searchKey: PropTypes.string,
+        gallery: PropTypes.array,
+        page: PropTypes.number.isRequired,
+        showModal: PropTypes.bool.isRequired,
+        status: PropTypes.string.isRequired,
+        largeImage: PropTypes.string,
+        largeImageAlt: PropTypes.string,
+      })
+    ),
+  };
+
   state = {
     searchKey: '',
     gallery: [],
     page: 1,
     showModal: false,
     status: 'idle',
-    largeImage: null,
+    largeImage: '',
     largeImageAlt: '',
   };
 
@@ -116,7 +131,6 @@ export class App extends Component {
             onClose={closeModal}
           />
         )}
-        {console.log(this.state.largeImageAlt)}
         <ToastContainer autoClose={3000} />
       </>
     );

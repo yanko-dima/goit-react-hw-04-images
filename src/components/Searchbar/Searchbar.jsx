@@ -1,9 +1,16 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import css from 'components/Searchbar/Searchbar.module.css';
 import 'components/styles.css';
 
 class Searchbar extends Component {
+  static propTypes = {
+    state: PropTypes.arrayOf(
+      PropTypes.exact({ search: PropTypes.string.isRequired })
+    ),
+  };
+
   state = {
     search: '',
   };
