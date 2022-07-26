@@ -16,3 +16,25 @@
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
 }
+
+.idleWraper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.idleTitle {
+  color: #475a6a;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 5%;
+}
+
+.idleText {
+  color: #475a6a;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.4;
+}
