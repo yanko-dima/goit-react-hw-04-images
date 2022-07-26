@@ -24,7 +24,6 @@ const ImageGallery = ({
   }
 
   if (status === 'resolved') {
-    console.log('status', status);
     return (
       <>
         <ul className={css.imageGallery}>

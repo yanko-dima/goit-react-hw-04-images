@@ -20,7 +20,6 @@ class Searchbar extends Component {
 
     if (this.state.search.trim() === '') {
       toast.error('🦄 Enter image name!');
-      // alert('🦄 Enter image name!');
       return;
     }
 

@@ -15,8 +15,6 @@ export class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('prevState: ', prevState);
-    console.log('nextState: ', this.state);
     const { page } = this.state;
     const prevSearchKey = prevState.searchKey;
     const nextSearchKey = this.state.searchKey;
@@ -29,10 +27,10 @@ export class App extends Component {
       fetchImages(nextSearchKey, page)
         .then(images => {
           this.setState({ images: images.hits, status: 'resolved' });
-          console.log('images: ', images);
 
           if (images.hits.length === 0) {
             toast.error('🦄 I`m dont found images');
+            this.onStatusIdle();
           }
         })
         .catch(error => this.setState({ error }));
@@ -55,6 +53,10 @@ export class App extends Component {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
+  onStatusIdle = () => {
+    this.setState({ status: 'idle' });
+  };
+
   render() {
     const { searchKey, images, page, showModal, status } = this.state;
 
@@ -73,7 +75,7 @@ export class App extends Component {
           showModal={showModal}
           status={status}
         />
-        <ToastContainer autoClose={3000} />
+        <ToastContainer autoClose={4000} />
       </>
     );
   }
