@@ -31,6 +31,7 @@ export class App extends Component {
     page: 1,
     showModal: false,
     status: 'idle',
+    loading: false,
     largeImage: '',
     largeImageAlt: '',
   };
@@ -42,7 +43,7 @@ export class App extends Component {
     const nextPage = this.state.page;
 
     if (prevSearchKey !== nextSearchKey || prevPage !== nextPage) {
-      this.setState({ status: 'pending' });
+      this.setState({ loading: true });
 
       fetchImages(nextSearchKey, nextPage)
         .then(result => {
@@ -50,9 +51,14 @@ export class App extends Component {
             if (result.hits.length === 0) {
               toast.info('🦄 No images for your request');
               this.onStatusIdle();
+              this.setState({ loading: false });
             } else {
               toast.success(`🦄 I'm found ${result.total} images`);
-              this.setState({ gallery: result.hits, status: 'resolved' });
+              this.setState({
+                gallery: result.hits,
+                status: 'resolved',
+                loading: false,
+              });
             }
           }
         })
@@ -60,12 +66,13 @@ export class App extends Component {
     }
 
     if (prevPage !== nextPage && nextPage !== 1) {
-      this.setState({ status: 'pending' });
+      this.setState({ loading: true });
       fetchImages(nextSearchKey, nextPage)
         .then(result => {
           this.setState({
             gallery: [...prevState.gallery, ...result.hits],
             status: 'resolved',
+            loading: false,
           });
         })
         .catch(error => this.setState({ error }));
@@ -77,7 +84,7 @@ export class App extends Component {
   };
 
   onLoadMore = () => {
-    this.setState({ status: 'pending' });
+    // this.setState({ loading: true });
     this.setState(({ page }) => ({ page: page + 1 }));
   };
 
@@ -106,7 +113,7 @@ export class App extends Component {
       openModal,
       hangleLargeImageAlt,
     } = this;
-    const { gallery, showModal, status, largeImage, largeImageAlt } =
+    const { gallery, showModal, status, largeImage, largeImageAlt, loading } =
       this.state;
 
     return (
@@ -120,7 +127,7 @@ export class App extends Component {
             onLargeImageAlt={hangleLargeImageAlt}
           />
         )}
-        {status === 'pending' && <Loader />}
+        {loading && <Loader />}
         {status === 'resolved' && gallery.length >= 12 && (
           <Button onLoadMore={onLoadMore} />
         )}
