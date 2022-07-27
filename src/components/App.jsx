@@ -52,6 +52,7 @@ export class App extends Component {
               toast.info('🦄 No images for your request');
               this.onStatusIdle();
               this.setState({ loading: false });
+              return;
             } else {
               toast.success(`🦄 I'm found ${result.total} images`);
               this.setState({
@@ -59,16 +60,10 @@ export class App extends Component {
                 status: 'resolved',
                 loading: false,
               });
+              return;
             }
           }
-        })
-        .catch(error => this.setState({ error }));
-    }
 
-    if (prevPage !== nextPage && nextPage !== 1) {
-      this.setState({ loading: true });
-      fetchImages(nextSearchKey, nextPage)
-        .then(result => {
           this.setState({
             gallery: [...prevState.gallery, ...result.hits],
             status: 'resolved',
@@ -84,7 +79,6 @@ export class App extends Component {
   };
 
   onLoadMore = () => {
-    // this.setState({ loading: true });
     this.setState(({ page }) => ({ page: page + 1 }));
   };
 
