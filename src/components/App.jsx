@@ -18,8 +18,13 @@ export const App = () => {
   const [loading, setLoading] = useState(false);
   const [largeImage, setLargeImage] = useState('');
   const [largeImageAlt, setLargeImageAlt] = useState('');
+  const [showButton, setShowButton] = useState(true);
 
   useEffect(() => {
+    if (!searchKey) {
+      return;
+    }
+
     setLoading(true);
 
     fetchImages(searchKey, page)
@@ -35,48 +40,41 @@ export const App = () => {
             setGallery(result.hits);
             setStatus('resolved');
             setLoading(false);
+            // if ()
             return;
           }
         }
 
-        setGallery([...gallery, ...result.hits]);
-        setStatus('resolved');
+        setGallery(prev => [...prev, ...result.hits]);
+        console.log(result.hits.length);
         setLoading(false);
       })
       .catch(error => console.log(error.message));
-  }, [searchKey, page, gallery]);
+  }, [searchKey, page]);
 
   const formSubmitHandler = ({ search }) => {
     setSearchKey(search);
     setPage(1);
   };
 
-  // const onStatusIdle = () => {
-  //   setStatus('idle');
-  // };
-
   const openModal = image => {
     setShowModal(true);
     setLargeImage(image.largeImageURL);
-    // this.setState(({ showModal }) => ({ showModal: !showModal }));
-    // this.setState({ largeImage: image.largeImageURL });
   };
 
   const closeModal = () => {
-    // this.setState(({ showModal }) => ({ showModal: !showModal }));
     setShowModal(false);
   };
 
   const hangleLargeImageAlt = image => {
-    // this.setState({ largeImageAlt: image.tags });
     setLargeImageAlt(image.tags);
   };
 
   const onLoadMore = () => {
-    // this.setState(({ page }) => ({ page: page + 1 }));
     setPage(page => page + 1);
   };
 
+  console.log(gallery[gallery.length - 1]);
   return (
     <>
       <Searchbar onSubmit={formSubmitHandler} />
