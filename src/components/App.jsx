@@ -40,13 +40,17 @@ export const App = () => {
             setGallery(result.hits);
             setStatus('resolved');
             setLoading(false);
-            // if ()
+            if (result.hits.length >= 12) {
+              setShowButton(true);
+            }
             return;
           }
         }
 
+        if (result.hits.length < 12) {
+          setShowButton(false);
+        }
         setGallery(prev => [...prev, ...result.hits]);
-        console.log(result.hits.length);
         setLoading(false);
       })
       .catch(error => console.log(error.message));
@@ -74,7 +78,6 @@ export const App = () => {
     setPage(page => page + 1);
   };
 
-  console.log(gallery[gallery.length - 1]);
   return (
     <>
       <Searchbar onSubmit={formSubmitHandler} />
@@ -87,7 +90,7 @@ export const App = () => {
         />
       )}
       {loading && <Loader />}
-      {status === 'resolved' && gallery.length >= 12 && (
+      {status === 'resolved' && showButton && (
         <Button onLoadMore={onLoadMore} />
       )}
       {showModal && largeImage && (
