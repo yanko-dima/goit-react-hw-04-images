@@ -1,54 +1,43 @@
-import { Component } from 'react';
+import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import css from './Modal.module.css';
 
-const modalRoot = document.querySelector('#modal-root');
+export default function Modal({ largeImage, alt, onClose }) {
+  const modalRoot = useRef(document.querySelector('#modal-root'));
 
-class Modal extends Component {
-  static propTypes = {
-    props: PropTypes.arrayOf(
-      PropTypes.exact({
-        largeImage: PropTypes.string.isRequired,
-        alt: PropTypes.string.isRequired,
-      })
-    ),
-  };
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  });
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
-
-  handleKeyDown = e => {
+  const handleKeyDown = e => {
     if (e.code === 'Escape') {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  handleBeckdropClick = e => {
+  const handleBeckdropClick = e => {
     if (e.currentTarget === e.target) {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  render() {
-    const { largeImage, alt } = this.props;
-
-    return createPortal(
-      <div className={css.Overlay} onClick={this.handleBeckdropClick}>
-        <div className={css.Modal}>
-          <img src={largeImage} alt={alt} />
-        </div>
-      </div>,
-      modalRoot
-    );
-  }
+  return createPortal(
+    <div className={css.Overlay} onClick={handleBeckdropClick}>
+      <div className={css.Modal}>
+        <img src={largeImage} alt={alt} />
+      </div>
+    </div>,
+    modalRoot.current
+  );
 }
 
-Modal.propTypes = {};
-
-export default Modal;
+Modal.propTypes = {
+  largeImage: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
